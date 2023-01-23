@@ -1,0 +1,86 @@
+.table-pic
+{
+    /* height: 100px; */
+    width: 50px;
+}
+.table-pic img
+{
+    width: 100%;
+    border-radius: 50%;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* footer */
+
+
+.card-items {
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    top:20%;
+  }
+  
+  .card-item {
+    border-radius:10px;
+    color: rgb(255, 255, 255);
+    margin: 15px 10px;
+    width: 280px;
+    padding: 30px 70px;
+    border:6px violet;
+    
+  
+  } 
+  .card-1 {
+    background-color: #c7e0f1;
+  }
+  .card-2 {
+    background-color: #f1dbe9;
+  }
+  .card-3 {
+    background-color: #eee9cf;
+  }
+
+  
+  .card-4 {
+    /* background: linear-gradient(110.42deg, #00c1fe 18.27%, #faffc1 91.84%); */
+    background-color: #e8f745;
+  }
+
+  header
+  {
+    min-height:500px
+
+  }
+
+
+
+
+  .error input
+{
+  border:2px red solid;
+}
+.success input 
+{
+  border:2px greenyellow solid ;
+}
+
+  @media screen and (max-width: 800px) {
+    header 
+    {
+      margin-top:100px;
+      min-height:800px
+  
+    }
+  }
