@@ -1,10 +1,15 @@
 
 <?php
 
+session_start();
 require_once("../controllers/artistController.php");
 require_once("dry/uploadimages.php");
 
-
+if(!isset($_SESSION["name"]))
+{
+  header("location:./login.php");
+  die;
+}
 
 $data=new ArtistController();
 $newartiste=new ArtistController();
@@ -37,51 +42,17 @@ $xx->update();
 
     <title>Artists</title>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Lyrics</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav m-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Darkmode</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Home</a></li>
-            <li><a class="dropdown-item" href="#">Products</a></li>
-            <li><a class="dropdown-item" href="#">Artistes</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Log out</a></li>
-          </ul>
-        </li>
-        
-      </ul>
-      <form class="d-flex ms-auto">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success me-4" type="submit">Search</button>
+<body style="background-color:#DDDDDD;">
 
-      </form>
-    </div>
-  </div>
-</nav>
+<?php include_once "./dry/navbar.php" ; ?>
 
 <header class="mt-4 container ">
-    <button class="btn btn-info d-block ms-auto text-white" data-bs-toggle="modal" data-bs-target="#exampleModal2" id="addNewArtist">Add new Artiste</button>
+    <button style="background-color: #355764 !important;" class="btn  d-block ms-auto text-white" data-bs-toggle="modal" data-bs-target="#exampleModal2" id="addNewArtist">Add new Artiste</button>
 </header>
 
 <section >
     <div class="container mt-5 table-responsive">
-        <table class="table table-dark table-striped-columns">
+        <table  class="table thead-light table-dark table-striped-columns ">
             <thead>
                 <tr>
                 <th scope="col">Name</th>
@@ -100,13 +71,13 @@ $xx->update();
                 <tr>
                 <td><?php echo $ar['name'];?></td>
                 <td><?php echo $ar['date'];?></td>
-                <td class="table-pic"><img src="<?php echo $ar['img'];?>" alt="image"></td>
+                <td  style='height:70px' class="table-pic"><img style='height:100%' src="<?php echo $ar['img'];?>" alt="image"></td>
                 <td class="d-flex gap-3 justify-content-center" scope="col">
                 
-                   <button class="btn btn-warning" name="edit" data-bs-toggle="modal" data-bs-target="#exampleModal2" onclick=showData(<?php echo $id ;?>)>Edit</button> 
+                   <button class="btn btn-warning p-3" name="edit" data-bs-toggle="modal" data-bs-target="#exampleModal2" onclick=showData(<?php echo $id ;?>)>Edit</button> 
                    <form action="../controllers/artistController.php" method="POST" >
                         <input type="hidden" name="id" value="<?php echo $ar['id'];  ?>">
-                        <button class="btn btn-danger" name="delete">delete</button>
+                        <button class="btn btn-danger p-3" name="delete">delete</button>
                     </form>
                  </td>
                 </tr>
@@ -151,14 +122,17 @@ $xx->update();
   <input type="text" hidden  class="form-control" id="id" name="id" >
     <label class="form-label">Name</label>
     <input type="text" class="form-control" id="name" name="name[]"  >
+    <p></p>
   </div>
   <div class="mb-3">
     <label  class="form-label">Date</label>
     <input type="date" class="form-control" id="date" name="date[]" >
+    <p></p>
   </div>
   <div class="mb-3">
     <label  class="form-label">Image</label>
     <input type="file"  class="form-control"  id="file" name="file[]" >
+    <p></p>
   </div>
     
     </div>
@@ -168,7 +142,6 @@ $xx->update();
       <div class="modal-footer">
         <button type="submit" class="btn btn-success px-4 " name="save" id="save">Save</button>
         <button type="submit" class="btn btn-success px-4 " name="update" id="update">Update</button>
-
         <span class=" bg-info text-white fw-bolder fs-4 rounded px-3 py-2  " name="plus" id="plus">+</span>
 
         </div>
@@ -186,58 +159,66 @@ const name=document.getElementById("name")
 const date=document.getElementById("date")
 const image=document.getElementById("file")
 
-
-
-
 form.addEventListener("submit",e =>
 {
   if(!validateForm())
      e.preventDefault()
     
-    //  console.log(validateForm())
+      console.log(validateForm())
 
 
 })
 
 function validateForm()
 {
-    let check=true
+    let checkName
+    let checkDate
+    let checkImage
     if(name.value.trim()=='')
     {
         setError(name,'name can not be empty')
-        check=false 
+        checkName=false 
 
     }
     else if(name.value.trim().length<5 || name.value.trim().length>15 )
     {
         setError(name,'name must be between 5 and 15 characters')
-        check=false 
+        checkName=false 
 
 
     }
     else
           {setSuccess(name)
-          check= true
+            checkName=true
            }
     if(date.value.trim()=='' || date.value.trim()=='jj/mm/aaaa')
           {
             setError(date,'date can not be empty')
-            check=false 
+            checkDate=false 
           }
+    else
+    {
+      setSuccess(date)
+      checkDate=true
+
+    }
 
     if(image.value.trim()=='')
           {
             setError(image,'image can not be empty')
-            check=false 
+            checkImage=false 
           }
  
     else
     {
-      setSuccess(date)
       setSuccess(image)
-      check=true 
+      checkImage=true
     }
-    return check
+
+    if(checkName && checkDate)
+    return true
+    else
+    return false
        
     
 
@@ -251,9 +232,10 @@ function setError(element,errorMessage)
     if(parent.classList.contains('success'))
     parent.classList.remove('success')
     parent.classList.add('error')
-    // const para=parent.querySelector('p')
-    // para.innerText=errorMessage;
-    // para.style.visibility='visible'
+    const para=parent.querySelector('p')
+    para.innerText=errorMessage;
+    para.style.visibility='visible'
+    para.style.color="red"
     
 }
 function setSuccess(element)
@@ -262,7 +244,7 @@ function setSuccess(element)
     if(parent.classList.contains('error'))
     {
         parent.classList.remove('error')
-        // parent.querySelector('p').style.visibility='hidden'
+        parent.querySelector('p').style.visibility='hidden'
     }
       
     parent.classList.add('success')

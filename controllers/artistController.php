@@ -72,10 +72,11 @@ class ArtistController
                         $file_destination="../uploads/".$file_new_name;
                         move_uploaded_file($file_tmp_name,$file_destination);
                         $img=$file_destination;  
-                    }
+                }
                 else
                 {
                     echo "you can not upload files of this type !!";
+                    $img="";
                 }
 
 
@@ -99,6 +100,8 @@ class ArtistController
         if(isset($_POST["update"]))
         {
 
+            $pic=false;
+            $exist="";
 
 
            $file=$_FILES['file'];
@@ -118,13 +121,15 @@ class ArtistController
                   $file_destination="../uploads/".$file_new_name;
                   move_uploaded_file($file_tmp_name,$file_destination);
                   $img=$file_destination;  
-              }
+                  $pic=true;
+          }
           else
           {
               echo "you can not upload files of this type !!";
           }
-          
-
+          if($pic)
+          {
+            $exist="yes";
 
             $data=array(
 
@@ -133,7 +138,22 @@ class ArtistController
                 'date'=>$_POST['date'][0],
                 'file'=>$img
             );
-           Artist::updateArtist($data);
+          }
+          else
+          {
+            $exist="no";
+            $data=array(
+
+                'id'=>$_POST['id'],
+                'name'=>$_POST['name'][0],
+                'date'=>$_POST['date'][0]
+            );
+          }
+          
+
+
+        
+           Artist::updateArtist($data,$exist);
            header("location:../views/viewArtists.php");
    
         }

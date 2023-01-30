@@ -2,10 +2,12 @@ function showData(id)
 {
     console.log("id is"+id)
     document.getElementById("save").style.display="none"
-    document.getElementById("update").style.display="none"
+    document.getElementById("update").style.display="block"
     document.getElementById("id").value=document.getElementById("id"+id).getAttribute("data")
     document.getElementById("name").value=document.getElementById("name"+id).getAttribute("data")
     document.getElementById("date").value=document.getElementById("date"+id).getAttribute("data")
+    document.getElementById("plus").style.display="none"
+
     // document.getElementById("img").value=document.getElementById("img"+id).getAttribute("data")
 
 
@@ -14,6 +16,8 @@ document.getElementById("addNewArtist").onclick=function()
 {
     document.getElementById("update").style.display="none"
     document.getElementById("save").style.display="block"
+    document.getElementById("plus").style.display="block"
+
     document.getElementById("formArtist").reset()
    
 

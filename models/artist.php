@@ -24,10 +24,19 @@ class Artist
         
     }
 
-    static public function updateArtist($data)
+    static public function updateArtist($data,$exist)
     {
-        $stmt=db::connect()->prepare("update artiste set name=:name,date=:date,img=:img where id=:id");
-        $stmt->execute(array(":name"=>$data["name"],":date"=>$data["date"],":img"=>$data["file"],":id"=>$data["id"]));
+        if($exist=="yes")
+        {
+            $stmt=db::connect()->prepare("update artiste set name=:name,date=:date,img=:img where id=:id");
+            $stmt->execute(array(":name"=>$data["name"],":date"=>$data["date"],":img"=>$data["file"],":id"=>$data["id"]));
+        }
+        else
+        {
+            $stmt=db::connect()->prepare("update artiste set name=:name,date=:date where id=:id");
+            $stmt->execute(array(":name"=>$data["name"],":date"=>$data["date"],":id"=>$data["id"]));
+        }
+
         
     }
 

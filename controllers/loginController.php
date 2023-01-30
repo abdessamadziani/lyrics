@@ -1,29 +1,10 @@
 <?php
 
-
+session_start();
   require_once( __DIR__. "./../models/login.php");
    require_once( __DIR__. "./../views/login.php");
 
 
-   //validation sign in
-// if(isset($_POST['signin']))
-// {
-//     if (empty($_POST['email']) && empty($_POST['password']))
-//     {
-//         header('Location:../views/login.php?error=Email and Password both are empty !!');
-//         exit();
-//     }
-//     else if(empty($_POST['email']))
-//     {
-//         header('Location:../views/login.php?error=Email is empty !!');
-//         exit();
-//     }
-//     else if(empty($_POST['password']))
-//     {
-//         header('Location:../views/login.php?error=Password is empty !!');
-//         exit();
-//     }
-// }
 
 class LoginController
 {
@@ -64,7 +45,12 @@ class LoginController
           //   setcookie('password_cookie',$_POST['password'],time()+60*60,'/');
           // }
           if($res=="ok")
-        header("location:../views/viewArtists.php");
+          {
+            header("location:../views/homeAdmin.php");
+             $_SESSION["name"]="session";
+
+
+          }
         else
         echo "error";
 

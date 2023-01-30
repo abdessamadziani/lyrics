@@ -4,6 +4,12 @@
 
 require_once "../models/db.php";
 
+session_start();
+if(!isset($_SESSION["name"]))
+{
+  header("location:./login.php");
+  die;
+}
 $stmt=db::connect()->prepare("select count(*) as nbsongs from song ");
         $stmt->execute();
         $nbsongs=$stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -27,7 +33,8 @@ $stmt=db::connect()->prepare("select * from artiste");
 $stmt->execute();
 $artists=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt=db::connect()->prepare("select s.id,s.titre,s.parol,s.date,s.description,s.img,s.typeid,s.adminid,s.artisteid,ar.name as artistname,ar.img as artistimg,ad.name as adminname,cat.name as catname from song s,artiste ar,admin ad,category cat where s.artisteid=ar.id;  ");
+$stmt=db::connect()->prepare("select s.id,s.titre,s.parol,s.date,s.description,s.img,s.typeid,s.adminid,s.artisteid,ar.name as artistname,ar.img as artistimg,ad.name as adminname,cat.name as catname from song s,artiste ar,admin ad,category cat where s.artisteid=ar.id and s.typeid=cat.id and s.adminid=ad.id;  ");
+
 $stmt->execute();
 $songs=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -47,7 +54,6 @@ $songs=$stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="../css/style.css">
 
@@ -56,76 +62,24 @@ $songs=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 </head>
-<body>
+<body style="background-color:#DDDDDD;">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Lyrics</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav m-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Darkmode</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Home</a></li>
-            <li><a class="dropdown-item" href="#">Products</a></li>
-            <li><a class="dropdown-item" href="#">Artistes</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Log out</a></li>
-          </ul>
-        </li>
-        
-      </ul>
-      <form class="d-flex ms-auto">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success me-4" type="submit">Search</button>
-
-      </form>
-    </div>
-  </div>
-</nav>
+<?php include_once "./dry/navbar.php" ; ?>
 
 
 
 
 
-<!-- <section style="width: 90% ;margin:auto; display:flex; margin-top:30px "> -->
-    <!-- <div class="card bg-danger w-25 m-2 p-5">
-         <h3>lorem lorem lorem</h3>
-    </div>
-    <div class="card card-2 bg-warning w-25 m-2 p-5 ">
-    <h3>lorem lorem lorem</h3>
-    </div>
-    <div class="card card-3 bg-info w-25 m-2 p-5">
-    <h3>lorem lorem lorem</h3>
-
-    </div>
-    <div class="card card-4 bg-secondary w-25 m-2 p-5">
-    <h3>lorem lorem lorem</h3>
-
-    </div> -->
-
-
-<header   class=" d-flex justify-content-center">
+<header   class=" header d-flex justify-content-center">
       
       <div class="card-items row container  ">
             <div class="card-item card-1 col-12 col-md-6  col-lg-2 px-3  ">
-                <i class=" icon fas fa-music mt-0 text-info fs-3"></i>
+            <i class=" icon fas fa-music mt-0  fs-3 text-info"></i>
                 <h2 class="text-capitalize   pt-1">Song</h2>
                 <span class="text-Secondary fw-bold fs-3 "><?php echo $nbsongs[0]["nbsongs"] ?></span>
             </div>
             <div class="card-item card-2 col-12 col-md-6  col-lg-2 ">
-                <i class=" icon fas fa-money-check-alt text-info fs-3"></i>
+            <i class=" icon fas fa-money-check-alt fs-3 text-info"></i>
                 <h2 class="text-capitalize   pt-1">Artist</h2>
                 <span class=" fw-bold text-Secondary fs-3"><?php echo $nbartists[0]["nbartists"] ?></span>
             </div>
@@ -143,6 +97,12 @@ $songs=$stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 </header>
+
+
+<div class=" w-100 m-3 ">
+    <h1 class="text-center text-white">Artists</h1>
+    <span class="line"></span>
+</div>
 
 
 
@@ -178,6 +138,10 @@ $songs=$stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
 </div>
 
+<div class=" w-100 m-3 ">
+    <h1 class="text-center text-white">Songs</h1>
+    <span class="line"></span>
+</div>
 
 <div class="container mt-5 table-responsive " >
         <table id="myTableSong" class="table table-dark table-striped-columns">
@@ -213,12 +177,7 @@ $songs=$stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td class="table-pic"><img src="<?php echo $song['artistimg'];?>" alt="image"></td>
 
                 </tr>
-                <div class='d-none'>
-                    <h6 id='id<?php echo $id;?>'   data="<?php echo $ar["id"] ;?>" ></h6>
-                    <h6 id='name<?php echo $id;?>'   data= "<?php echo $ar["name"];?>" ></h6>
-                    <h6 id='date<?php echo $id;?>'   data="<?php echo $ar["date"] ;?>"></h6>
-                    <h6 id='img<?php echo $id;?>'    data="<?php echo $ar["img"] ;?> "></h6>
-                </div>
+           
                 <?php }?>
             </tbody>
         </table>
@@ -238,9 +197,9 @@ $(document).ready( function () {
 } );
 </script>
 
+<script src="https://kit.fontawesome.com/24dbd9ce21.js" crossorigin="anonymous"></script>
 
 <script src="../js/bootstrap.bundle.js"></script>
-<script src="https://kit.fontawesome.com/24dbd9ce21.js" crossorigin="anonymous"></script>
 
 </body>
 </html>

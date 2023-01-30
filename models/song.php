@@ -36,12 +36,7 @@ static public function allArtists()
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
  }
 
- static public function allSearchSongs($titre)
- {
-    $stmt=db::connect()->prepare("select s.id,s.titre,s.parol,s.date,s.description,s.img,s.typeid,s.adminid,s.artisteid,ar.name as artistname,ar.img as artistimg from song s,artiste ar where s.artisteid=ar.id and s.titre=:titre; ");
-    $stmt->execute(array(":titre"=>$titre));
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
- }
+
 
 
  static public function addSong($data)
@@ -52,11 +47,18 @@ static public function allArtists()
  }
 
 
- static public function updateSong($data)
+ static public function updateSong($data,$exist)
  {
-     $stmt=db::connect()->prepare("update song set titre=:titre,parol=:parol,date=:date,description=:description,img=:img,typeid=:typeid,adminid=:adminid,artisteid=:artisteid where id=:id");
-     $stmt->execute(array(":titre"=>$data["titre"],":parol"=>$data["parol"],":date"=>$data["date"],":description"=>$data["description"],":img"=>$data["file"],":typeid"=>$data["type"],":adminid"=>$data["admin"],":artisteid"=>$data["artist"],":id"=>$data["id"]));
-     
+        if($exist=="yes")
+        {
+                $stmt=db::connect()->prepare("update song set titre=:titre,parol=:parol,date=:date,description=:description,img=:img,typeid=:typeid,adminid=:adminid,artisteid=:artisteid where id=:id");
+                $stmt->execute(array(":titre"=>$data["titre"],":parol"=>$data["parol"],":date"=>$data["date"],":description"=>$data["description"],":img"=>$data["file"],":typeid"=>$data["type"],":adminid"=>$data["admin"],":artisteid"=>$data["artist"],":id"=>$data["id"]));
+        }
+        else
+        {
+                $stmt=db::connect()->prepare("update song set titre=:titre,parol=:parol,date=:date,description=:description,typeid=:typeid,adminid=:adminid,artisteid=:artisteid where id=:id");
+                $stmt->execute(array(":titre"=>$data["titre"],":parol"=>$data["parol"],":date"=>$data["date"],":description"=>$data["description"],":typeid"=>$data["type"],":adminid"=>$data["admin"],":artisteid"=>$data["artist"],":id"=>$data["id"]));
+        }
  }
  
  static public function deleteSong($id)

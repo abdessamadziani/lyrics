@@ -33,18 +33,7 @@ class SongController
 
     }
 
-    public  function searchSongs()
-    {
-
-        if(isset($_POST["search"]))
-        {
-            $titre=$_POST["titre"];
-            $songs=Song::allSearchSongs($titre);
-            return $songs;
-        }
-    
-
-    }
+   
 
    
     public function add()
@@ -69,10 +58,11 @@ class SongController
                     $file_destination="../uploads/".$file_new_name;
                     move_uploaded_file($file_tmp_name,$file_destination);
                     $img=$file_destination;  
-                }
+            }
             else
             {
                 echo "you can not upload files of this type !!";
+                $img="";
             }
 
             $data=array(
@@ -95,12 +85,14 @@ class SongController
     }
 
 
-
+  
     public function update()
     {
         if(isset($_POST["update"]))
         {
-
+           
+            $pic=false;
+            $exist="";
 
 
            $file=$_FILES['file'];
@@ -120,31 +112,48 @@ class SongController
                   $file_destination="../uploads/".$file_new_name;
                   move_uploaded_file($file_tmp_name,$file_destination);
                   $img=$file_destination;  
-              }
+                  $pic=true;
+          }
           else
           {
               echo "you can not upload files of this type !!";
           }
           
-
-
-            $data=array(
-
-                'id'=>$_POST['id'],
-                'titre'=>$_POST['titre'],
-                'parol'=>$_POST['lyrics'],
-                'date'=>$_POST['date'],
-                'description'=>$_POST['description'],
-                'file'=>$img,
-                'type'=>$_POST['type'],
-                'admin'=>$_POST['admin'],
-                'artist'=>$_POST['artist']
-
-
+if($pic)
+{
+  $exist="yes";
+    $data=array(
+    
+        'id'=>$_POST['id'],
+        'titre'=>$_POST['titre'],
+        'parol'=>$_POST['lyrics'],
+        'date'=>$_POST['date'],
+        'description'=>$_POST['description'],
+        'file'=>$img,
+        'type'=>$_POST['type'],
+        'admin'=>$_POST['admin'],
+        'artist'=>$_POST['artist']
         
-                
-            );
-           Song::updateSong($data);
+    );
+}
+else
+{
+    $exist="no";
+    $data=array(
+
+        'id'=>$_POST['id'],
+        'titre'=>$_POST['titre'],
+        'parol'=>$_POST['lyrics'],
+        'date'=>$_POST['date'],
+        'description'=>$_POST['description'],
+        'type'=>$_POST['type'],
+        'admin'=>$_POST['admin'],
+        'artist'=>$_POST['artist']
+        
+    );
+}
+
+           Song::updateSong($data,$exist);
            header("location:../views/viewSongs.php");
    
         }

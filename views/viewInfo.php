@@ -3,6 +3,12 @@
 
  <?php
  require_once "../models/db.php";
+ session_start();
+ if(!isset($_SESSION["name"]))
+{
+  header("location:./login.php");
+  die;
+}
 
   ?>
 <!DOCTYPE html>
@@ -36,21 +42,23 @@ echo "
 Details Information
 </div>
 <div class='card-body'>
-<h4 class='card-text'> Song Title :   {$infos[0]["titre"]}</h4>
+<h4 class='card-text'><span class='text-danger'>Song Title </span> :   {$infos[0]["titre"]}</h4>
 <hr>
-<h4 class='card-text'>Category :  {$infos[0]["catname"]}</h4>
+<h4 class='card-text'><span class='text-danger'>Category </span>:  {$infos[0]["catname"]}</h4>
 <hr>
-<h4 class='card-text'>Date :{$infos[0]["date"]}</h4>
+<h4 class='card-text'><span class='text-danger'>Date </span>:  {$infos[0]["date"]}</h4>
 <hr>
-<h4 class='card-text'>Description :  {$infos[0]["description"]} </h4>
+<h4 class='card-text'><span class='text-danger'>Lyrics </span>:  {$infos[0]["parol"]}</h4>
 <hr>
-<h4 class='card-text'>Admin :  {$infos[0]["adminname"]} </h4>
+<h4 class='card-text'><span class='text-danger'>Description</span> :  {$infos[0]["description"]} </h4>
 <hr>
-<h4 class='card-text'>Artist :  {$infos[0]["artistname"]}</h4>
+<h4 class='card-text'><span class='text-danger'>Admin</span> :  {$infos[0]["adminname"]} </h4>
 <hr>
-<h4 class='card-text'> Song Image :   <img class='rounded-circle' src='{$infos[0]["img"]}' width=100px />  </h4> 
+<h4 class='card-text'><span class='text-danger'>Artist</span> :  {$infos[0]["artistname"]}</h4>
 <hr>
-<h4 class='card-text'> Artist Picture :   <img class='rounded-circle' src='{$infos[0]["artistimg"]}' width=150px />  </h4> 
+<h4 class='card-text'><span class='text-danger'> Song Image</span> :   <img class='rounded-circle' src='{$infos[0]["img"]}' width=100px />  </h4> 
+<hr>
+<h4 class='card-text'><span class='text-danger'> Artist Picture</span> :   <img class='rounded-circle' src='{$infos[0]["artistimg"]}' width=150px />  </h4> 
 <hr>
 </div>
 <div class='card-footer  bg-dark text-white' >

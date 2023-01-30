@@ -1,3 +1,10 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Clicker+Script&family=Montserrat:ital,wght@0,100;0,500;0,600;0,700;1,600&family=Pacifico&family=Permanent+Marker&family=Rubik+Gemstones&display=swap');
+
+ body
+ {
+  font-family: 'Montserrat', sans-serif;
+ } 
 .table-pic
 {
     /* height: 100px; */
@@ -8,6 +15,13 @@
     width: 100%;
     border-radius: 50%;
 
+}
+.line {
+  display: block !important;
+  margin: 20px auto 0 auto !important;
+  width: 80px !important;
+  height: 4px !important;
+  background-color: #658864 !important;
 }
 
 
@@ -58,7 +72,7 @@
     background-color: #e8f745;
   }
 
-  header
+  header.header
   {
     min-height:500px
 
@@ -66,6 +80,14 @@
 
 
 
+
+
+
+
+
+
+
+/* validation */
 
   .error input
 {
@@ -77,7 +99,7 @@
 }
 
   @media screen and (max-width: 800px) {
-    header 
+    header.header
     {
       margin-top:100px;
       min-height:800px
